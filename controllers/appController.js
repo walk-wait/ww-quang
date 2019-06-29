@@ -26,13 +26,11 @@ module.exports = {
           let stop = {}
           stop.id = el.dataValues.tag
           stop.title = route + direction + " - " + el.Route.dataValues.routeTitle + " / " + el.dataValues.stopTitle
-          console.log(stop.title)
 
           return stop
         })
 
         let index = stopList.findIndex( el => el.id == stopId)
-        console.log(index, stopId)
         let nextStops = stopList.slice(index + 1)
         res.json(nextStops)
       })
@@ -47,6 +45,7 @@ module.exports = {
   // For latitude, longtitude data
     let originCoord = await findLatlon(origin)  
     let destinationCoord = await findLatlon(destination)
+    console.log(originCoord, destinationCoord)
 
   // For walk time
     let walkData = await walkTime(originCoord, destinationCoord)

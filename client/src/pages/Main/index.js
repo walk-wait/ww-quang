@@ -73,7 +73,6 @@ class Main extends React.Component {
     let {route, direction, stopId} = this.state.depart
     API.getNextStops(route, direction, stopId)
       .then(res => {
-        console.log(res.data)
       this.setState({arrivalOptions: res.data})
       })
   }
@@ -94,7 +93,6 @@ class Main extends React.Component {
     let route = parseInt(this.state.depart.route)
     let origin = this.state.depart.stopId
     let destination = this.state.arrival.stopId
-    console.log(origin, destination)
     API.search(route, origin, destination)
       .then(res => {
         console.log(res.data)
