@@ -56,3 +56,17 @@ const a = {
  const y = a[day][time].success
 
  binomial(x, y)
+
+
+ //Binomial Runkit NPM 
+ const binomialProbability = require('binomial-probability')
+
+ // What is the probability of x successes in n trials?
+ binomialProbability(trials, successes, probability_of_success)
+ 
+ // What is the probability of x or fewer successes in n trials?
+ binomialProbability.cumulative(trials, successes, probability_of_success)
+
+//  var binomialProbability = require("binomial-probability");
+
+var add 1 minute;
