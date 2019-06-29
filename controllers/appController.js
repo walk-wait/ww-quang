@@ -45,7 +45,6 @@ module.exports = {
   // For latitude, longtitude data
     let originCoord = await findLatlon(origin)  
     let destinationCoord = await findLatlon(destination)
-    console.log(originCoord, destinationCoord)
 
   // For walk time
     let walkData = await walkTime(originCoord, destinationCoord)
