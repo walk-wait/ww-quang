@@ -3,6 +3,7 @@ import { MDBContainer, MDBRow, MDBCol, MDBBtn, } from 'mdbreact';
 import Start from '../../components/Start'
 import End from '../../components/End'
 import API from '../../utils/API'
+import '../pageStyle.css'
 
 class Main extends React.Component {
   constructor(props){
@@ -47,6 +48,7 @@ class Main extends React.Component {
         let title = fullTitle.split(" - ")[1].split(" ")[1]
         let stop = bus.stop.title.split(" ").slice(1).join(" ")
         thisBus.title = bus.route.id + direction + " - " + title + " / " + stop
+        thisBus.direction = direction
         departOptions.push(thisBus)
       });
       this.setState({departOptions})
@@ -60,6 +62,7 @@ class Main extends React.Component {
     let depart = {
       route: selectedBus.getAttribute('data-route'),
       stopId: e.target.value,
+      direction: selectedBus.getAttribute('data-direction')
     }
     await this.setState({depart})
     this.listDestinations()
@@ -67,10 +70,11 @@ class Main extends React.Component {
   }
 
   listDestinations = () => {
-    let {route, stopId} = this.state.depart
-    API.getNextStops(route, stopId)
+    let {route, direction, stopId} = this.state.depart
+    API.getNextStops(route, direction, stopId)
       .then(res => {
-      this.setState({arrivalOptions: res.data})
+        console.log(res.data)
+      // this.setState({arrivalOptions: res.data})
       })
   }
 
@@ -98,7 +102,7 @@ class Main extends React.Component {
 
   render() {
     return(
-      <MDBContainer className="text-center mt-5 pt-5">
+      <MDBContainer className="text-center mt-5 pt-5 mainContainer">
         <form>
           <MDBRow className="row justify-content-center">
               <MDBCol md="4" sm="12">
