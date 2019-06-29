@@ -1,6 +1,7 @@
 import React from 'react';
 import { MDBContainer, MDBRow, MDBCol, MDBBtn, } from 'mdbreact';
 import API from '../../utils/AdminAPI'
+import '../pageStyle.css'
 
 class Admin extends React.Component {
   constructor(props){
@@ -19,8 +20,8 @@ class Admin extends React.Component {
 
   render() {
     return(
-      <MDBContainer className="text-center mt-5 pt-5">
-          <MDBRow className="justify-content-center">
+      <MDBContainer className="text-center mt-5 pt-5 mainContainer">
+          <MDBRow className="justify-content-center mt-5">
               <MDBCol md="5" sm="12">
                 <MDBBtn onClick = {(e) => this.populateRoute(e)}>Add TTC Routes and Stops</MDBBtn>
               </MDBCol>

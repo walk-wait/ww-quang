@@ -4,31 +4,38 @@ const axios = require("axios");
 
 // Defining methods for the appController
 module.exports = {
-  findAll: async (req, res) => {
+  findNearBy: async (req, res) => {
     let buses = await axios.get(`http://restbus.info/api/locations/${req.params.lat},${req.params.lon}/predictions`)
     res.json(buses.data)
   },
   findStops: (req, res) => {
-    // need code for sequelize to find the right route
-    // return all route that comes after
-    let stops = [
-      {
-        route: "6S",
-        id: "8823",
-        title: "Bay St At College St"
+    let route = req.params.route
+    let direction = req.params.direction
+    let stopId = req.params.id
+    
+    db.Stop.findAll({
+      // include: [db.Route],
+      where: {
+        "$Route.route$": route,
+        direction: direction
       },
-      {
-        route: "512E",
-        id: "8869",
-        title: "St Clair Ave West At Bathurst St East Side"
-      },
-      {
-        route: "95",
-        id: "9032",
-        title: "Avenue"
-      }
-    ]
-    res.json(stops)
+      include:[db.Route]
+    })
+      .then(stops => {
+        let stopList = stops.map(el => {
+          let stop = {}
+          stop.id = el.dataValues.tag
+          stop.title = route + direction + " - " + el.Route.dataValues.routeTitle + " / " + el.dataValues.stopTitle
+          console.log(stop.title)
+
+          return stop
+        })
+
+        let index = stopList.findIndex( el => el.id == stopId)
+        console.log(index, stopId)
+        let nextStops = stopList.slice(index + 1)
+        res.json(nextStops)
+      })
   },
   search: async (req, res) => {
     let route = req.params.route
