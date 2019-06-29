@@ -76,16 +76,13 @@ class Main extends React.Component {
 
   handleDestinationInput = (e) => {
     e.preventDefault()
-    console.log(e.target)
     let index = e.target.selectedIndex
     let selectedBus = e.target.childNodes[index]
     let arrival = {
       route: selectedBus.getAttribute('data-route'),
       stopId: e.target.value,
     }
-    console.log(arrival)
     this.setState({arrival})
-    console.log(this.state.arrival)
   }
 
   handleSubmit = (e) => {
