@@ -1,7 +1,7 @@
 module.exports = function (sequelize, DataTypes) {
     var Stop = sequelize.define("Stop", {
         tag: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING,
             allowNull: false
         },
         stopTitle: {
@@ -14,10 +14,6 @@ module.exports = function (sequelize, DataTypes) {
         },
         longitude: {
             type: DataTypes.DOUBLE,
-            allowNull: false
-        },
-        position: {
-            type: DataTypes.INTEGER,
             allowNull: false
         },
         direction: {
