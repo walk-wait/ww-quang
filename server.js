@@ -7,7 +7,7 @@ const session = require("express-session");
 const cookieParser = require('cookie-parser');
 let MemoryStore = require('session-memory-store')(session);
 const db = require("./models" );
-const binomialProbability = require("binomial-probability");
+// const binomialProbability = require("binomial-probability");
 
 const PORT = process.env.PORT || 3001;
 

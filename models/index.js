@@ -7,7 +7,7 @@ var basename = path.basename(module.filename);
 var env = process.env.NODE_ENV || "development";
 var config = require(__dirname + "/../config/mysql/config.js")[env];
 var db = {};
-var binomialProbability = require("binomialProbability");
+// var binomialProbability = require("binomialProbability");
 
 if (config.use_env_variable) {
   var sequelize = new Sequelize(process.env[config.use_env_variable]);
