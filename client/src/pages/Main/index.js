@@ -74,7 +74,7 @@ class Main extends React.Component {
     API.getNextStops(route, direction, stopId)
       .then(res => {
         console.log(res.data)
-      // this.setState({arrivalOptions: res.data})
+      this.setState({arrivalOptions: res.data})
       })
   }
 
@@ -83,7 +83,7 @@ class Main extends React.Component {
     let index = e.target.selectedIndex
     let selectedBus = e.target.childNodes[index]
     let arrival = {
-      route: selectedBus.getAttribute('data-route'),
+      stop: selectedBus.getAttribute('data-route'),
       stopId: e.target.value,
     }
     this.setState({arrival})
@@ -94,6 +94,7 @@ class Main extends React.Component {
     let route = parseInt(this.state.depart.route)
     let origin = this.state.depart.stopId
     let destination = this.state.arrival.stopId
+    console.log(origin, destination)
     API.search(route, origin, destination)
       .then(res => {
         console.log(res.data)

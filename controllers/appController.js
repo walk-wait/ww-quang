@@ -45,12 +45,11 @@ module.exports = {
     let busData = await busTime(route, origin, destination)
 
   // For latitude, longtitude data
-    // let originCoord = await findLatlon(origin)  
-    // let destinationCoord = await findLatlon(destination)
+    let originCoord = await findLatlon(origin)  
+    let destinationCoord = await findLatlon(destination)
 
   // For walk time
-    // Need to remove hardcoded coordinates after database is implemented
-    let walkData = await walkTime(originCoord = "43.68734,-79.3974499", destinationCoord = "43.6832099,-79.41767")
+    let walkData = await walkTime(originCoord, destinationCoord)
 
     let walkOrWait = {
       bus: busData,
@@ -86,8 +85,17 @@ const busTime = async (route, origin, destination) => {
 }
 
 const findLatlon = async (stopId) => {
-  //queries database to return the latitude and longtitude of that bus stop
+  let dbResult = await db.Stop.findOne({
+    where: {
+      tag: stopId
+    }
+  })
+
+  let coord = dbResult.dataValues.latitude + "," + dbResult.dataValues.longitude
+
+  return coord
 }
+
 const walkTime = async (originCoord, destinationCoord) => {
   // Will have to probably wrap this in async try catch block. need to ask how
   let googleData = await axios.get(`https://maps.googleapis.com/maps/api/distancematrix/json?origins=${originCoord}&destinations=${destinationCoord}&mode=walking&key=${process.env.API_KEY}`)
