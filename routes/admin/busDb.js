@@ -3,6 +3,6 @@ const adminController = require("../../controllers/adminController");
 
 // Matches with "/admin/busDb/routes"
 router.route("/routes")
-  .get()
+  .get(adminController.createAllRoutes)
 
 module.exports = router;

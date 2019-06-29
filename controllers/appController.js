@@ -5,7 +5,6 @@ const axios = require("axios");
 // Defining methods for the appController
 module.exports = {
   findAll: async (req, res) => {
-    console.log(req.params.lat, req.params.lon)
     let buses = await axios.get(`http://restbus.info/api/locations/${req.params.lat},${req.params.lon}/predictions`)
     res.json(buses.data)
   },
