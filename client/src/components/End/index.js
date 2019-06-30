@@ -6,8 +6,8 @@ class Arrival extends Component {
     <div className="input-group mb-3">
         <select className="custom-select" id="" onChange={(e) => this.props.handleChange(e)}>
             <option defaultValue>Arrive...</option>
-            {this.props.arrivalOptions.map(option =>
-              <option key={option.id} value={option.id}>{option.title}</option>
+            {this.props.arrivalOptions.map((option, index) =>
+              <option key={`${index}_${this.props.route}_${option.id}`} value={option.id}>{option.title}</option>
             )}
         </select>
     </div>
