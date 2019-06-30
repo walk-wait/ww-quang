@@ -129,8 +129,9 @@ const walkTime = async (originCoord, destinationCoord) => {
   // Will have to probably wrap this in async try catch block. need to ask how
   let googleData = await axios.get(`https://maps.googleapis.com/maps/api/distancematrix/json?origins=${originCoord}&destinations=${destinationCoord}&mode=walking&key=${process.env.API_KEY}`)
   let walkTimeData = googleData.data.rows[0].elements[0].duration.text.split(" ")
+
   let walkTime
-  if(walkTimeData[1] === "hour" || "hours" || "hrs"){
+  if(["hour", "hours", "hrs"].indexOf(walkTimeData[1]) > -1){
     walkTime = parseInt(walkTimeData[0])* 60 + parseInt(walkTimeData[2])
   } else {
     walkTime = parseInt(walkTimeData[0])
