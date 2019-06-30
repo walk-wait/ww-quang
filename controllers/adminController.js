@@ -18,8 +18,10 @@ module.exports = {
             })
             routesData.forEach((route, routeId) => {
                 db.Route.findOrCreate({
-                    route: route.route,
-                    routeTitle: route.routeTitle
+                    where: {
+                        route: route.route,
+                        routeTitle: route.routeTitle
+                    }
                 })
                 .then(routeRes => {
                     axios.get(route.link)
@@ -42,7 +44,9 @@ module.exports = {
                                     return info
                                 })
                                 directionalStops.forEach(stop => {
-                                    db.Stop.findOrCreate(stop)
+                                    db.Stop.findOrCreate({
+                                        where: stop
+                                    })
                                 });
                             });
                         })

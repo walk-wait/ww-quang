@@ -109,17 +109,17 @@ const walkTime = async (originCoord, destinationCoord) => {
 // nextBus = time until the bus arrives at starting point
 // eta = time the bus will arrive at destination. 
 
-var walkWaitDecisionWeekDayAm = eta*binomialProbability(10, 7, 0.9)+eta;
-walkWaitDecisionWeekDayAm;
+// var walkWaitDecisionWeekDayAm = eta*binomialProbability(10, 7, 0.9)+eta;
+// walkWaitDecisionWeekDayAm;
 
-var walkWaitDecisionWeekDayPM = eta*binomialProbability(10, 6, 0.9)+eta;
-walkWaitDecisionWeekDayPM;
+// var walkWaitDecisionWeekDayPM = eta*binomialProbability(10, 6, 0.9)+eta;
+// walkWaitDecisionWeekDayPM;
 
-var walkWaitDecisionWeekDayEve = eta*binomialProbability(10, 8, 0.9)+eta;
-walkWaitDecisionWeekDayEve;
+// var walkWaitDecisionWeekDayEve = eta*binomialProbability(10, 8, 0.9)+eta;
+// walkWaitDecisionWeekDayEve;
 
-var walkWaitDecisionOther = eta*binomialProbability(10, math.random(), 0.5)+eta;
-walkWaitDecisionOther;
+// var walkWaitDecisionOther = eta*binomialProbability(10, math.random(), 0.5)+eta;
+// walkWaitDecisionOther;
 
 
 // function binomialProbability(n, k) {

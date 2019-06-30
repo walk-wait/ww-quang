@@ -58,6 +58,7 @@ class Main extends React.Component {
   handleDepartInput = async (e) => {
     e.preventDefault()
     let index = e.target.selectedIndex
+    console.log(index, e.target.childNodes.length)
     let selectedBus = e.target.childNodes[index]
     let depart = {
       route: selectedBus.getAttribute('data-route'),
