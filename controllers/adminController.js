@@ -35,6 +35,7 @@ module.exports = {
                                 }
                             })
 
+                            // renders only two directions
                             for (let i = 0; i < 2; i++){
                                 let dir = link.data.directions[i]
                                 let direction = dir.title.charAt(0)
@@ -51,6 +52,7 @@ module.exports = {
                                 });
                             }
 
+                            // // render all direction including short turn and night bus
                             // link.data.directions.forEach(dir => {
                             //     let direction = dir.title.charAt(0)
                             //     let directionalStops = dir.stops.map(el => {
