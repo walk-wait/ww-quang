@@ -7,7 +7,7 @@ class Arrival extends Component {
         <select className="custom-select" id="" onChange={(e) => this.props.handleChange(e)}>
             <option defaultValue>Arrive...</option>
             {this.props.arrivalOptions.map(option =>
-              <option key={`${option.route},${option.id}`} value={option.id} data-route={option.route}>{option.route} - {option.title}</option>
+              <option key={option.id} value={option.id}>{option.title}</option>
             )}
         </select>
     </div>

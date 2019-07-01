@@ -17,7 +17,7 @@ module.exports = {
                 }
             })
             routesData.forEach((route, routeId) => {
-                db.Route.create({
+                db.Route.findOrCreate({
                     route: route.route,
                     routeTitle: route.routeTitle
                 })
@@ -42,7 +42,7 @@ module.exports = {
                                     return info
                                 })
                                 directionalStops.forEach(stop => {
-                                    db.Stop.create(stop)
+                                    db.Stop.findOrCreate(stop)
                                 });
                             });
                         })
