@@ -3,6 +3,7 @@ import { MDBContainer, MDBRow, MDBCol, MDBBtn, } from 'mdbreact';
 import Start from '../../components/Start'
 import End from '../../components/End'
 import API from '../../utils/API'
+import '../pageStyle.css'
 
 class Main extends React.Component {
   constructor(props){
@@ -44,9 +45,10 @@ class Main extends React.Component {
         thisBus.id = bus.stop.id
         let fullTitle = bus.values[0].direction.title.split("To: ")[1]
         let direction = fullTitle.split(" - ")[0].charAt(0)
-        let title = fullTitle.split(" - ")[1].split(" ")[1]
+        let title = bus.route.title.split("-")[1]
         let stop = bus.stop.title.split(" ").slice(1).join(" ")
         thisBus.title = bus.route.id + direction + " - " + title + " / " + stop
+        thisBus.direction = direction
         departOptions.push(thisBus)
       });
       this.setState({departOptions})
@@ -60,6 +62,7 @@ class Main extends React.Component {
     let depart = {
       route: selectedBus.getAttribute('data-route'),
       stopId: e.target.value,
+      direction: selectedBus.getAttribute('data-direction')
     }
     await this.setState({depart})
     this.listDestinations()
@@ -67,8 +70,8 @@ class Main extends React.Component {
   }
 
   listDestinations = () => {
-    let {route, stopId} = this.state.depart
-    API.getNextStops(route, stopId)
+    let {route, direction, stopId} = this.state.depart
+    API.getNextStops(route, direction, stopId)
       .then(res => {
       this.setState({arrivalOptions: res.data})
       })
@@ -76,16 +79,23 @@ class Main extends React.Component {
 
   handleDestinationInput = (e) => {
     e.preventDefault()
-    console.log(e.target)
     let index = e.target.selectedIndex
-    let selectedBus = e.target.childNodes[index]
-    let arrival = {
-      route: selectedBus.getAttribute('data-route'),
-      stopId: e.target.value,
+    // let selectedBus = e.target.childNodes[index]
+    let terminal = false    
+    if (index === e.target.childNodes.length - 1){
+      terminal = true
     }
-    console.log(arrival)
+    let previousStop = e.target.childNodes[index - 1].getAttribute("value")
+    if (index === 1){
+      previousStop = this.state.depart.stopId    
+    }
+    let arrival = {
+      stopId: e.target.value,
+      terminal: terminal,
+      previous: previousStop
+    }
+
     this.setState({arrival})
-    console.log(this.state.arrival)
   }
 
   handleSubmit = (e) => {
@@ -93,7 +103,9 @@ class Main extends React.Component {
     let route = parseInt(this.state.depart.route)
     let origin = this.state.depart.stopId
     let destination = this.state.arrival.stopId
-    API.search(route, origin, destination)
+    let terminal = this.state.arrival.terminal
+    let previous = this.state.arrival.previous
+    API.search(route, origin, destination, terminal, previous)
       .then(res => {
         console.log(res.data)
       })
@@ -101,14 +113,14 @@ class Main extends React.Component {
 
   render() {
     return(
-      <MDBContainer className="text-center mt-5 pt-5">
+      <MDBContainer className="text-center mt-5 pt-5 mainContainer">
         <form>
           <MDBRow className="row justify-content-center">
               <MDBCol md="4" sm="12">
                   <Start departOptions={this.state.departOptions} geolocate={this.geolocate} latitude={this.state.latitude} longitude={this.state.longitude} handleChange={this.handleDepartInput}/>
               </MDBCol>
               <MDBCol md="4" sm="12">
-                  <End arrivalOptions={this.state.arrivalOptions} handleChange={this.handleDestinationInput}/> 
+                  <End arrivalOptions={this.state.arrivalOptions} route={this.state.depart.route} handleChange={this.handleDestinationInput}/> 
               </MDBCol>
               <MDBCol md="1">
                 <MDBBtn size="sm" onClick={(e) => this.handleSubmit(e)}>Submit</MDBBtn>
