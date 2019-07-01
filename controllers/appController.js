@@ -140,3 +140,42 @@ const walkTime = async (originCoord, destinationCoord) => {
   return walkTime
 }
 
+//Add Algorithm here?
+// walkTime = walk time from google API
+// nextBus = time until the bus arrives at starting point
+// eta = time the bus will arrive at destination. 
+
+// Math.random();
+// var s = Math.floor(Math.random()*9)+1;
+
+// var walkWaitTtc = eta * binomialProbability(10, s, 0.5) + eta;
+
+// console.log(s + " at " + walkWaitTtc);
+
+// var walkWaitDecisionWeekDayAm = eta*binomialProbability(10, 7, 0.9)+eta;
+// walkWaitDecisionWeekDayAm;
+
+// var walkWaitDecisionWeekDayPM = eta*binomialProbability(10, 6, 0.9)+eta;
+// walkWaitDecisionWeekDayPM;
+
+// var walkWaitDecisionWeekDayEve = eta*binomialProbability(10, 8, 0.9)+eta;
+// walkWaitDecisionWeekDayEve;
+
+// var s = math.random()*10;
+
+// var walkWaitDecisionOther = eta*binomialProbability(10, s, 0.5)+eta;
+
+// walkWaitDecisionOther;
+
+
+// function binomialProbability(n, k) {
+//   var n = 2;
+//   var k = 1;
+//   if ((typeof n !== 'number') || (typeof k !== 'number')) 
+// return false; 
+//  var coeff = 1;
+//  for (var x = n-k+1; x <= n; x++) coeff *= x;
+//  for (x = 1; x <= k; x++) coeff /= x;
+//  return coeff;
+// }
+// console.log(coeff);
