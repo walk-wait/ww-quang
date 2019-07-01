@@ -49,7 +49,6 @@ module.exports = {
   // For latitude, longtitude data
     let originCoord = await findLatlon(origin)  
     let destinationCoord = await findLatlon(destination)
-    console.log(originCoord, destinationCoord)
 
   // For walk time
     let walkData = await walkTime(originCoord, destinationCoord)
@@ -81,6 +80,8 @@ const busTime = async (route, origin, destination, terminal, previous) => {
   let atDestinationTime
   let bunch = false
 
+  console.log(busTimes.data)
+
   // If/Else statement depending on how many data point returns
   if (busTimes.data.length === 2) {
     atOriginTime = Math.round(busTimes.data[0].values[0].minutes + busTimes.data[0].values[0].seconds/60)
@@ -93,7 +94,6 @@ const busTime = async (route, origin, destination, terminal, previous) => {
       // this is all other case weather if destination is terinal or not
       destinationBusValues = busTimes.data[1].values
       let index = destinationBusValues.findIndex(bus => bus.vehicle.id === nextVehicleId) 
-      console.log(bunch)
       if (index === -1){
         // If for any reason why I cannot find the first bus to arrive at origin within destination data
         let lastBusTime = Math.round(busTimes.data[1].values[busTimes.data[1].values.length - 1].minutes + busTimes.data[1].values[busTimes.data[1].values.length - 1].seconds/60)
@@ -125,7 +125,7 @@ const busTime = async (route, origin, destination, terminal, previous) => {
       atDestinationTime += 2
     }
     
-  } else if (busTimes.data.length === 1) {
+  // } else if (busTimes.data.length === 1) {
     // this is the case when there is a bus prediction for either at origin or destination but not both
       //need to find out if this data is of origin or destination
         //if origin only
@@ -142,8 +142,6 @@ const busTime = async (route, origin, destination, terminal, previous) => {
     atDestinationTime = 999999
   }
   
-  
-  console.log(bunch)
   //Returns times in minutes
   let busTimeData = {
     nextBus: atOriginTime,
