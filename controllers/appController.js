@@ -1,7 +1,7 @@
 require("dotenv").config();
 const db = require("../models");
 const axios = require("axios");
-const binomialProbability = require("binomial-probability");
+// const binomialProbability = require("binomial-probability");
 
 // Defining methods for the appController
 module.exports = {
@@ -97,23 +97,31 @@ const walkTime = async (originCoord, destinationCoord) => {
   return walkTime
 }
 
-
-//Add Algorithm here
+//Add Algorithm here?
 // walkTime = walk time from google API
 // nextBus = time until the bus arrives at starting point
 // eta = time the bus will arrive at destination. 
 
-var walkWaitDecisionWeekDayAm = eta*binomialProbability(10, 7, 0.9)+eta;
-walkWaitDecisionWeekDayAm;
+// Math.random();
+// var s = Math.floor(Math.random()*9)+1;
 
-var walkWaitDecisionWeekDayPM = eta*binomialProbability(10, 6, 0.9)+eta;
-walkWaitDecisionWeekDayPM;
+// var walkWaitTtc = eta * binomialProbability(10, s, 0.5) + eta;
 
-var walkWaitDecisionWeekDayEve = eta*binomialProbability(10, 8, 0.9)+eta;
-walkWaitDecisionWeekDayEve;
+// console.log(s + " at " + walkWaitTtc);
 
-var walkWaitDecisionOther = eta*binomialProbability(10, math.random(), 0.5)+eta;
-walkWaitDecisionOther;
+// var walkWaitDecisionWeekDayAm = eta*binomialProbability(10, 7, 0.9)+eta;
+// walkWaitDecisionWeekDayAm;
+
+// var walkWaitDecisionWeekDayPM = eta*binomialProbability(10, 6, 0.9)+eta;
+// walkWaitDecisionWeekDayPM;
+
+// var walkWaitDecisionWeekDayEve = eta*binomialProbability(10, 8, 0.9)+eta;
+// walkWaitDecisionWeekDayEve;
+
+// var s = math.random()*10;
+
+// var walkWaitDecisionOther = eta*binomialProbability(10, s, 0.5)+eta;
+// walkWaitDecisionOther;
 
 
 // function binomialProbability(n, k) {
