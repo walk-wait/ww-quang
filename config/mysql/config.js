@@ -2,17 +2,17 @@ module.exports =
 {
   "development": {
     "username": "root",
-    "password": "root",
+    "password": "CarryonPaul1122!",
     "database": "WWdb",
     "host": "localhost",
     "dialect": "mysql",
     "port": "3306"
   },
   "test": {
-    "username": "",
-    "password": null,
-    "database": "",
-    "host": "",
+    "username": "root",
+    "password": "CarryonPaul1122!",
+    "database": "WWdb",
+    "host": "localhost",
     "dialect": "mysql"
   },
   "production": {

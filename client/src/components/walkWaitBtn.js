@@ -70,7 +70,7 @@ console.log(s + " at " + walkWaitTtc);
  //Conditions array if/else for walk or wait determination
  let conditionsArray = [
   walkTime < 20, 
-  eta >= walkTime,
+  eta >= walkTime, //bus.eta
   bunch = false,
 ]
 
