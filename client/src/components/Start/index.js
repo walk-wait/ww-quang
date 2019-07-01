@@ -12,8 +12,8 @@ class Departure extends Component {
         </div>
         <select className="custom-select" id="" onChange={(e) => this.props.handleChange(e)}>
             <option defaultValue>Start...</option>
-            {this.props.departOptions.map(option =>
-              <option key={`${option.route},${option.id}`} value={option.id} data-route={option.route} data-direction={option.direction}>{option.title}</option>
+            {this.props.departOptions.map((option, index) =>
+              <option key={`${index}_${option.route}_${option.id}`} value={option.id} data-route={option.route} data-direction={option.direction}>{option.title}</option>
             )}
         </select>
     </div>
