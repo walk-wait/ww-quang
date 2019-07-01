@@ -9,7 +9,7 @@ module.exports = {
         .then(ttc => {
             let routesData = ttc.data.map(el => {
                 route = el.id
-                routeTitle = el.title.split("-")[1].split(" ")[0]
+                routeTitle = el.title.split("-")[1]
                 return {
                     route: route,
                     routeTitle: routeTitle,
@@ -17,9 +17,11 @@ module.exports = {
                 }
             })
             routesData.forEach((route, routeId) => {
-                db.Route.create({
-                    route: route.route,
-                    routeTitle: route.routeTitle
+                db.Route.findOrCreate({
+                    where: {
+                        route: route.route,
+                        routeTitle: route.routeTitle
+                    }
                 })
                 .then(routeRes => {
                     axios.get(route.link)
@@ -42,7 +44,9 @@ module.exports = {
                                     return info
                                 })
                                 directionalStops.forEach(stop => {
-                                    db.Stop.create(stop)
+                                    db.Stop.findOrCreate({
+                                        where: stop
+                                    })
                                 });
                             });
                         })

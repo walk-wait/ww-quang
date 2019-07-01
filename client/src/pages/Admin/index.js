@@ -21,7 +21,7 @@ class Admin extends React.Component {
   render() {
     return(
       <MDBContainer className="text-center mt-5 pt-5 mainContainer">
-          <MDBRow className="justify-content-center mt-5">
+          <MDBRow className="justify-content-center">
               <MDBCol md="5" sm="12">
                 <MDBBtn onClick = {(e) => this.populateRoute(e)}>Add TTC Routes and Stops</MDBBtn>
               </MDBCol>
