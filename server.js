@@ -30,12 +30,9 @@ app.use(routes);
 
 
 
-// Connect to Mongoose or Sequelize
-  // CODE HERE ---
 
 
-
-// Start the API server
+// Start the API server, true drop the db and create automatically 
 var syncOptions = { force: false };
 
 // If running a test, set syncOptions.force to true
