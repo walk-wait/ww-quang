@@ -87,7 +87,7 @@ if (conditionsArray.indexOf(false) === -1) {
     });
   }  else {
       console.log(this.state.modalStatus);
-  }
+    } 
   }
 
  //Binomial Runkit NPM Instructions
