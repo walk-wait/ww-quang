@@ -130,11 +130,12 @@ const busTime = async (route, origin, destination, terminal, previous) => {
       //need to find out if this data is of origin or destination
         //if origin only
           // bus is not arriving at destination due to short turn
+          // check if bus arrive at previous
+              // if yes it is previous time + 2
+              // else at destinatoinTime = 999999
         //if destination only
           // no more bus to arrive at origin
-    
-    // this logic block is unnecessary?      
-        
+       
   } else {
     // this is the case when there are no bus predicted for origin or destination
     // set large number so time for bus should be much longer than any walk time
