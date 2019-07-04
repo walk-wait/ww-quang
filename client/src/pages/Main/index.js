@@ -3,6 +3,7 @@ import { MDBContainer, MDBRow, MDBCol, MDBBtn, } from 'mdbreact';
 import Start from '../../components/Start'
 import End from '../../components/End'
 import API from '../../utils/API'
+import WalkButtonWaitButton from '../../components/walkWaitBtn'
 import '../pageStyle.css'
 
 class Main extends React.Component {
@@ -14,7 +15,10 @@ class Main extends React.Component {
       departOptions: [],
       arrivalOptions: [],
       depart: {},
-      arrival: {}
+      arrival: {},
+      walkTimeCondition: false,
+      busTimeCondition: false,
+      busBunchCondition: false // assign to value and then change based on user request
     };
   }
 
@@ -105,8 +109,14 @@ class Main extends React.Component {
     let destination = this.state.arrival.stopId
     let terminal = this.state.arrival.terminal
     let previous = this.state.arrival.previous
+
     API.search(route, origin, destination, terminal, previous)
       .then(res => {
+        this.setState({ 
+          walkTimeCondition: res.data.conditions.walkTimeCondition,
+          busTimeCondition: res.data.conditions.busTimeCondition,
+          busBunchCondition: res.data.conditions.busBunchCondition
+         })
         console.log(res.data)
       })
   }
@@ -138,6 +148,12 @@ class Main extends React.Component {
                 <p style={{margin: "0"}}>Next bus: </p>
               </MDBCol>
           </MDBRow>
+
+          <WalkButtonWaitButton 
+            walkTimeCondition={this.state.walkTimeCondition}
+            busTimeCondition={this.state.busTimeCondition}
+            busBunchCondition={this.state.busBunchCondition}
+          />
 
       </MDBContainer>
     );
