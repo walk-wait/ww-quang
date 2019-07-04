@@ -5,6 +5,7 @@ import End from '../../components/End'
 import API from '../../utils/API'
 import '../pageStyle.css'
 
+
 class Main extends React.Component {
   constructor(props){
     super(props)
@@ -18,20 +19,33 @@ class Main extends React.Component {
     };
   }
 
+
   geolocate = (e) => {
     e.preventDefault()
+    let geoOptions = {
+       enableHighAccuracy: true,
+       timeout: 5000,
+       maximumAge: 0
+    };
+
     if ("geolocation" in navigator){
-      navigator.geolocation.getCurrentPosition((position) => {
-        this.setState({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude
-        })
-        let {latitude, longitude} = this.state
-        this.getBusAtLocation(latitude, longitude)
-      })
+      navigator.geolocation.getCurrentPosition(this.geoSucess, this.geoError, geoOptions)
     }else {
       console.log("geolocation is NOT available")
     }
+  }
+
+  geoSucess = (position) => {
+    this.setState({
+      latitude: position.coords.latitude,
+      longitude: position.coords.longitude
+    })
+    let {latitude, longitude} = this.state
+    this.getBusAtLocation(latitude, longitude)
+  }
+
+  geoError = (err) => {
+    console.log(`GEOLOCATE ERROR(${err.code}): ${err.message}`);
   }
 
   getBusAtLocation = (lat, lon) => {
