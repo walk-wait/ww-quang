@@ -9,6 +9,6 @@ export default {
     return axios.get(`/api/bus/nextstops/${route}/${direction}/${stopId}`)
   },
   search: (route, originStopId, destinationStopId, terminal, previous) => {
-    return axios.get(`api/app/search/${route}/${originStopId}/${destinationStopId}/${terminal}/${previous}`)
+    return axios.get(`/api/app/search/${route}/${originStopId}/${destinationStopId}/${terminal}/${previous}`)
   }
 };
