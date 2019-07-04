@@ -81,7 +81,8 @@ console.log(route, origin, destination)
   } else {
     busTimes = await axios.get(`http://restbus.info/api/agencies/ttc/tuples/${route}:${origin},${route}:${destination}/predictions`)
   }
-
+  console.log(JSON.stringify(busTimes))
+  
   //Set variables
   let atOriginTime
   let nextVehicleId
@@ -92,25 +93,31 @@ console.log(route, origin, destination)
 
   // If/Else statement depending on how many data point returns
   if (busTimes.data.length === 2) {
+    console.log("busTimes.data.length === 2")
     atOriginTime = Math.round(busTimes.data[1].values[0].minutes)
     nextVehicleId = busTimes.data[1].values[0].vehicle.id
   
     if (terminal && origin === previous) {
+      console.log("terminal && origin === previous")
       // this is the case if the origin is one stop before the terminal stop and the destination is the terminal
       atDestinationTime = atOriginTime
     } else {
+      console.log("terminal === false or origin !== previous")
       // this is all other case weather if destination is terminal or not
       destinationBusValues = busTimes.data[0].values
       index = destinationBusValues.findIndex(bus => bus.vehicle.id === nextVehicleId) 
       if (index === -1){
+        console.log("index === -1")
         // If for any reason why I cannot find the first bus to arrive at origin within destination data
         let lastBusTime = Math.round(busTimes.data[0].values[busTimes.data[0].values.length - 1].minutes)
 
         let secondLastBusTime
         if (busTimes.data[1].values.length >= 2) {
+          console.log("busTimes.data[1].values.length >= 2")
           // If there are two or more bus arriving at destination
           secondLastBusTime = Math.round(busTimes.data[0].values[busTimes.data[1].values.length - 2].minutes)
         } else {
+          console.log("only one bus at destination")
           // If there is only one bus arriving at destination
           secondLastBusTime = 0
         }
@@ -118,11 +125,13 @@ console.log(route, origin, destination)
         atDestinationTime = atOriginTime + lastBusTime + (lastBusTime - secondLastBusTime)
         
         // Bus probably bunched if there are 4 or more buses scheduled to arrive at destination and none of which is the next bus to start at origin
-        if (busTimes.data[1].values.length >= 4) {
+        if (busTimes.data[0].values.length >= 4) {
+          console.log("if there are 4 or more buses at destination")
           bunch = true
         }
 
       } else {
+        console.log("next bus found at destination")
         // Normal case where next bus to arrive at original is also found within destination data
         atDestinationTime = Math.round(busTimes.data[0].values[index].minutes)
       }
@@ -134,35 +143,42 @@ console.log(route, origin, destination)
     }
     
   } else if (busTimes.data.length === 1) {
-    console.log('this got triggered')
+    console.log('busTimes.data.length === 1')
     // this is the case when there is a bus prediction for either at origin or destination but not both
     //if origin only
     if (busTimes.data[0].stop.id === origin) {
+      console.log("busTimes.data[0].stop.id === origin")
       // check if bus arrive at previous
       let previousStop = await axios.get(`http://restbus.info/api/agencies/ttc/routes/${route}/stops/${previous}/predictions`)
-      console.log(previousStop)
+      console.log(JSON.stringify(previousStop))
       if(previousStop.data.length > 0) {
+        console.log("previousStop.data.length > 0")
         destinationBusValues = previousStop.data[0].values
         index = destinationBusValues.findIndex(bus => bus.vehicle.id === nextVehicleId)
         
         if(index > -1){
+          console.log("index found at previous")
           // if yes it is previous time + 2
           atDestinationTime = Math.round(previousStop.data[0].values[index].minutes) + 2
         } else {
+          console.log("bus not found in previous")
           atDestinationTime = 999999
         }
 
       } else {
+        console.log("busTimes.data[0].stop.id === destination")
           atDestinationTime = 999999
       }
 
     } else {
+      console.log("bus not at origin only destination")
       //if destination only
         // no more bus to arrive at origin
       atDestinationTime = 999999
     }
      
   } else {
+    console.log("no bus at origin or destination")
     // this is the case when there are no bus predicted for origin or destination
     // set large number so time for bus should be much longer than any walk time
     atOriginTime = 999999
