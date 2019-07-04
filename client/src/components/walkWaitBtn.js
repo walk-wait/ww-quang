@@ -1,11 +1,9 @@
 import React from 'react'
 
 class Result extends React.Component {
-  componentDidMount() {
-   
-   };
-
   render() {
+    console.log(this.props.busTimeCondition)
+
 
     //SET STATE HERE
   // if (conditionsArray.indexOf(false) === -1) {
@@ -13,11 +11,12 @@ class Result extends React.Component {
   //   this.setState({ collapse: true })
   //   }
 
+  let resultCondition1 = this.props.walkTimeCondition && this.props.busTimeCondition && this.props.busBunchCondition ? <h2>Walk</h2> : null
+  let resultCondition2 = this.props.busTimeCondition ? <h2>Wait</h2> : null
     return(
       <div>
-       <h2>Walk</h2>
-       <h2>Wait</h2>
-          {this.props.conditions}
+        { resultCondition1 }
+        { resultCondition2 }
       </div>
     );
   }
