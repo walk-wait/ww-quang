@@ -31,6 +31,7 @@ export default Result;
 
 
 
+
 // //Manual binomial function for probability
 // function binomial(n, k) {
 //     if ((typeof n !== 'number') || (typeof k !== 'number')) 
@@ -114,6 +115,7 @@ export default Result;
 //define a state I am cha
 
 //React to change state using conditions array
+
 //define state as boolean if all conditions are met in the if else or not met. 
 
 
@@ -122,6 +124,18 @@ export default Result;
 // 3 states do not apear, appear as walk and appear wait (to change state).
 //Moved JS to controller 
 //use conditions array to determin result and pass to prop.
+
+//  componentDidMount() {
+//   if(this.state.walk) {
+//     console.log(this.state.modalStatus);
+//     this.setState({ modalStatus: true}, () => {
+//          console.log(this.state.modalStatus);
+//     });
+//   }  else {
+//       console.log(this.state.modalStatus);
+//     } 
+//   }
+
 
  // <div> Walk or Wait</div>
  //Binomial Runkit NPM Instructions

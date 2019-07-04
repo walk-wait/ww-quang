@@ -10,9 +10,9 @@ module.exports =
   },
   "test": {
     "username": "",
-    "password": null,
-    "database": "",
-    "host": "",
+    "password": "",
+    "database": "3306",
+    "host": "localhost",
     "dialect": "mysql"
   },
   "production": {

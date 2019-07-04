@@ -7,6 +7,7 @@ const axios = require("axios");
 module.exports = {
   findNearBy: async (req, res) => {
     let buses = await axios.get(`http://restbus.info/api/locations/${req.params.lat},${req.params.lon}/predictions`)
+    console.log(req.params.lat,req.params.lon)
     res.json(buses.data)
   },
   findStops: (req, res) => {
@@ -49,10 +50,10 @@ module.exports = {
   // For latitude, longtitude data
     let originCoord = await findLatlon(origin)  
     let destinationCoord = await findLatlon(destination)
-    console.log(originCoord, destinationCoord)
 
   // For walk time
     let walkData = await walkTime(originCoord, destinationCoord)
+
 
   //Conditions array if/else for walk or wait determination
     let conditionsObject = {
@@ -61,11 +62,15 @@ module.exports = {
       busBunchCondition: false, // assign to value and then change based on user request
     }
 
+
+    
     let walkOrWait = {
       bus: busData,
       walk: walkData,
       conditions: conditionsObject
     }
+
+    
 
     res.json(walkOrWait)
   },
@@ -73,6 +78,8 @@ module.exports = {
 };
 
 const busTime = async (route, origin, destination, terminal, previous) => {
+console.log(route, origin, destination)
+
   let busTimes
 
   // Get bus time either at dstination or one stop before (previous) depending on it it is a terminal stop
@@ -82,35 +89,93 @@ const busTime = async (route, origin, destination, terminal, previous) => {
     busTimes = await axios.get(`http://restbus.info/api/agencies/ttc/tuples/${route}:${origin},${route}:${destination}/predictions`)
   }
 
-  let atOriginTime = Math.round(busTimes.data[0].values[0].minutes + busTimes.data[0].values[0].seconds/60)
-  let nexBusVehicleId = busTimes.data[0].values[0].vehicle.id
+  //Set variables
+  let atOriginTime
+  let nextVehicleId
+  let index
   let destinationBusValues
   let atDestinationTime
   let bunch = false
 
-  if (origin === previous) {
-    atDestinationTime = atOriginTime
-  } else {
-    destinationBusValues = busTimes.data[1].values
-    let index = destinationBusValues.findIndex(bus => bus.vehicle.id === nexBusVehicleId) 
-    console.log(bunch)
-    if (index === -1){
-      // let lastBusAtDestination = await axios.get(`http://restbus.info/api/agencies/ttc/routes/${route}/stops/${destination}/predictions`)
-      // let lastBusData = lastBusAtDestination.data[0].values[lastBusAtDestination.data[0].values.length -1]
-      // let lastBusTime = Math.round(lastBusData.minutes + lastBusData.seconds/60)
-      // atDestinationTime = atOriginTime + lastBusTime
+  // If/Else statement depending on how many data point returns
+  if (busTimes.data.length === 2) {
+    atOriginTime = Math.round(busTimes.data[1].values[0].minutes)
+    nextVehicleId = busTimes.data[1].values[0].vehicle.id
+  
+    if (terminal && origin === previous) {
+      // this is the case if the origin is one stop before the terminal stop and the destination is the terminal
       atDestinationTime = atOriginTime
-      bunch = true
     } else {
-      atDestinationTime = Math.round(busTimes.data[1].values[index].minutes + busTimes.data[1].values[index].seconds/60)
+      // this is all other case weather if destination is terminal or not
+      destinationBusValues = busTimes.data[0].values
+      index = destinationBusValues.findIndex(bus => bus.vehicle.id === nextVehicleId) 
+      if (index === -1){
+        // If for any reason why I cannot find the first bus to arrive at origin within destination data
+        let lastBusTime = Math.round(busTimes.data[0].values[busTimes.data[0].values.length - 1].minutes)
+
+        let secondLastBusTime
+        if (busTimes.data[1].values.length >= 2) {
+          // If there are two or more bus arriving at destination
+          secondLastBusTime = Math.round(busTimes.data[0].values[busTimes.data[1].values.length - 2].minutes)
+        } else {
+          // If there is only one bus arriving at destination
+          secondLastBusTime = 0
+        }
+
+        atDestinationTime = atOriginTime + lastBusTime + (lastBusTime - secondLastBusTime)
+        
+        // Bus probably bunched if there are 4 or more buses scheduled to arrive at destination and none of which is the next bus to start at origin
+        if (busTimes.data[1].values.length >= 4) {
+          bunch = true
+        }
+
+      } else {
+        // Normal case where next bus to arrive at original is also found within destination data
+        atDestinationTime = Math.round(busTimes.data[0].values[index].minutes)
+      }
     }
+    
+    // Add two minutes for destination at terminal stuff to padd the eta to destination
+    if (terminal === "true"){
+      atDestinationTime += 2
+    }
+    
+  } else if (busTimes.data.length === 1) {
+    console.log('this got triggered')
+    // this is the case when there is a bus prediction for either at origin or destination but not both
+    //if origin only
+    if (busTimes.data[0].stop.id === origin) {
+      // check if bus arrive at previous
+      let previousStop = await axios.get(`http://restbus.info/api/agencies/ttc/routes/${route}/stops/${previous}/predictions`)
+      console.log(previousStop)
+      if(previousStop.data.length > 0) {
+        destinationBusValues = previousStop.data[0].values
+        index = destinationBusValues.findIndex(bus => bus.vehicle.id === nextVehicleId)
+        
+        if(index > -1){
+          // if yes it is previous time + 2
+          atDestinationTime = Math.round(previousStop.data[0].values[index].minutes) + 2
+        } else {
+          atDestinationTime = 999999
+        }
+
+      } else {
+          atDestinationTime = 999999
+      }
+
+    } else {
+      //if destination only
+        // no more bus to arrive at origin
+      atDestinationTime = 999999
+    }
+     
+  } else {
+    // this is the case when there are no bus predicted for origin or destination
+    // set large number so time for bus should be much longer than any walk time
+    atOriginTime = 999999
+    atDestinationTime = 999999
   }
   
-  if (terminal === "true"){
-    atDestinationTime += 2
-  }
-  
-  console.log(bunch)
   //Returns times in minutes
   let busTimeData = {
     nextBus: atOriginTime,
@@ -148,3 +213,42 @@ const walkTime = async (originCoord, destinationCoord) => {
   return walkTime
 }
 
+//Add Algorithm here?
+// walkTime = walk time from google API
+// nextBus = time until the bus arrives at starting point
+// eta = time the bus will arrive at destination. 
+
+// Math.random();
+// var s = Math.floor(Math.random()*9)+1;
+
+// var walkWaitTtc = eta * binomialProbability(10, s, 0.5) + eta;
+
+// console.log(s + " at " + walkWaitTtc);
+
+// var walkWaitDecisionWeekDayAm = eta*binomialProbability(10, 7, 0.9)+eta;
+// walkWaitDecisionWeekDayAm;
+
+// var walkWaitDecisionWeekDayPM = eta*binomialProbability(10, 6, 0.9)+eta;
+// walkWaitDecisionWeekDayPM;
+
+// var walkWaitDecisionWeekDayEve = eta*binomialProbability(10, 8, 0.9)+eta;
+// walkWaitDecisionWeekDayEve;
+
+// var s = math.random()*10;
+
+// var walkWaitDecisionOther = eta*binomialProbability(10, s, 0.5)+eta;
+
+// walkWaitDecisionOther;
+
+
+// function binomialProbability(n, k) {
+//   var n = 2;
+//   var k = 1;
+//   if ((typeof n !== 'number') || (typeof k !== 'number')) 
+// return false; 
+//  var coeff = 1;
+//  for (var x = n-k+1; x <= n; x++) coeff *= x;
+//  for (x = 1; x <= k; x++) coeff /= x;
+//  return coeff;
+// }
+// console.log(coeff);
