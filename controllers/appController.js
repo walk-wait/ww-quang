@@ -58,19 +58,15 @@ module.exports = {
   //Conditions array if/else for walk or wait determination
     let conditionsObject = {
       walkTimeCondition: walkTime < 20, 
-      busTimeCondition: BusbusData.eta >= walkTime, //bus.eta walk.eta
+      busTimeCondition: busData.eta >= walkTime, //bus.eta walk.eta
       busBunchCondition: false, // assign to value and then change based on user request
     }
 
-
-    
     let walkOrWait = {
       bus: busData,
       walk: walkData,
       conditions: conditionsObject
     }
-
-    
 
     res.json(walkOrWait)
   },
