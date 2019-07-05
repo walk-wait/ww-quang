@@ -19,7 +19,8 @@ class Main extends React.Component {
       arrival: {},
       walkTimeCondition: false,
       busTimeCondition: false,
-      busBunchCondition: false // assign to value and then change based on user request
+      busBunchCondition: false,// assign to value and then change based on user request
+      receivedResult: false
     };
   }
 
@@ -129,7 +130,8 @@ class Main extends React.Component {
         this.setState({ 
           walkTimeCondition: res.data.conditions.walkTimeCondition,
           busTimeCondition: res.data.conditions.busTimeCondition,
-          busBunchCondition: res.data.conditions.busBunchCondition
+          busBunchCondition: res.data.conditions.busBunchCondition,
+          receivedResult: true
          })
         console.log(res.data)
       })
@@ -167,6 +169,7 @@ class Main extends React.Component {
             walkTimeCondition={this.state.walkTimeCondition}
             busTimeCondition={this.state.busTimeCondition}
             busBunchCondition={this.state.busBunchCondition}
+            result={this.state.receivedResult}
           />
 
       </MDBContainer>
