@@ -2,33 +2,32 @@ import React from 'react'
 
 class Result extends React.Component {
   render() {
-    console.log(this.props.busTimeCondition)
+  //   console.log(this.props.busTimeCondition)
 
+  // console.log("*****");
+  // console.log(this.props.walkTimeCondition);
+  // console.log(this.props.busTimeCondition);
+  // console.log(this.props.busBunchCondition);
+  // console.log("*****");
 
-    //SET STATE HERE
-  // if (conditionsArray.indexOf(false) === -1) {
-  //   // renderWalkButton //Else recommend wait
-  //   this.setState({ collapse: true })
-  //   }
+  let resultCondition1 = this.props.walkTimeCondition && this.props.busTimeCondition && this.props.busBunchCondition ? <h2>Walk</h2> : <h2>Wait</h2>
 
-  let resultCondition1 = this.props.walkTimeCondition && this.props.busTimeCondition && this.props.busBunchCondition ? <h2>Walk</h2> : null
-  let resultCondition2 = this.props.busTimeCondition ? <h2>Wait</h2> : null
+  let result = this.props.result
+  
+  console.log("resultCondition1 = ", resultCondition1);
+  let resultCondition2 = this.props.busTimeCondition ?   <h2>Wait</h2> : <h2>&nbsp;</h2>
+  console.log(resultCondition2);
+
+  let renderResult = <div> {resultCondition1} </div>
     return(
       <div>
-        { resultCondition1 }
-        { resultCondition2 }
+      {result ? renderResult: <h2>&nbsp;</h2>}        
       </div>
     );
   }
 }
 
 export default Result;
-
-
-
-
-
-
 
 
 // //Manual binomial function for probability
@@ -91,7 +90,7 @@ export default Result;
 
 //  binomial(x, y)
 
-// //Business logic for algorithm not using tables yet. 
+// // Business logic for algorithm not using tables yet. 
 // Math.random();
 // var s = Math.floor(Math.random()*9)+1;
 
