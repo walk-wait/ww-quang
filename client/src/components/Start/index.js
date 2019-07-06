@@ -8,7 +8,7 @@ class Departure extends Component {
     return (
     <div className="input-group mb-3">
         <div className="input-group-prepend">
-            <button className="btn search" type="button" onClick={(e) => this.props.geolocate(e)}><MDBIcon far icon="dot-circle" /></button>
+            <button style={{color: "#ffea00"}} className="btn search" type="button" onClick={(e) => this.props.geolocate(e)}><MDBIcon  far icon="dot-circle" /></button>
         </div>
         <select className="custom-select" id="" onChange={(e) => this.props.handleChange(e)}>
             <option defaultValue>Start...</option>

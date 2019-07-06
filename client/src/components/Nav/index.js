@@ -16,26 +16,23 @@ class FixedNavbar extends React.Component {
       });
   }
 
+  toggleActive = (e) => {
+    this.forceUpdate()
+  }
+
   render() {
-    const bgPink = {backgroundColor: '#e91e63'}
     return(
       <div>
         <header>
-          <MDBNavbar style={bgPink} dark expand="md" scrolling fixed="top">
-            <MDBNavbarBrand href="/">
+          <MDBNavbar style={{backgroundColor: "#212121"}} dark expand="md" scrolling fixed="top">
+            <MDBNavbarBrand href="/" style={{color: "#ffea00"}} onClick={this.toggleActive}>
                 <strong>Walk/Wait</strong>
             </MDBNavbarBrand>
             <MDBNavbarToggler onClick={ this.onClick } />
             <MDBCollapse isOpen = { this.state.collapse } navbar>
               <MDBNavbarNav left>
-                <MDBNavItem active>
-                    <MDBNavLink to="/">Home</MDBNavLink>
-                </MDBNavItem>
-                <MDBNavItem>
-                    <MDBNavLink to="#">About</MDBNavLink>
-                </MDBNavItem>
-                <MDBNavItem>
-                    <MDBNavLink to="#">Contact Us</MDBNavLink>
+                <MDBNavItem className={window.location.pathname === "/about" && "active"} onClick={this.toggleActive}>
+                    <MDBNavLink to="/about" >About</MDBNavLink>
                 </MDBNavItem>
               </MDBNavbarNav>
               <MDBNavbarNav right>

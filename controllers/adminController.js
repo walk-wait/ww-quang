@@ -16,7 +16,7 @@ module.exports = {
                     link: el._links.self.href
                 }
             })
-            routesData.forEach((route, routeId) => {
+            routesData.forEach((route) => {
                 db.Route.findOrCreate({
                     where: {
                         route: route.route,
@@ -35,30 +35,13 @@ module.exports = {
                                 }
                             })
 
-                            // // renders only two directions
-                            // for (let i = 0; i < 2; i++){
-                            //     let dir = link.data.directions[i]
-                            //     let direction = dir.title.charAt(0)
-                            //     let directionalStops = dir.stops.map(el => {
-                            //         let info = stops.filter(x => x.tag === el)[0]
-                            //         info.direction = direction
-                            //         info.RouteId = routeId + 1
-                            //         return info
-                            //     })
-                            //     directionalStops.forEach(stop => {
-                            //         db.Stop.findOrCreate({
-                            //             where: stop
-                            //         })
-                            //     });
-                            // }
-
-                            // render all direction including short turn and night bus
+                            // render all directions
                             link.data.directions.forEach(dir => {
                                 let direction = dir.title.charAt(0)
                                 let directionalStops = dir.stops.map(el => {
                                     let info = stops.filter(x => x.tag === el)[0]
                                     info.direction = direction
-                                    info.RouteId = routeId + 1
+                                    info.RouteId = routeRes[0].id
                                     return info
                                 })
                                 directionalStops.forEach(stop => {

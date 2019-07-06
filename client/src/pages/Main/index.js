@@ -20,7 +20,8 @@ class Main extends React.Component {
       walkTimeCondition: false,
       busTimeCondition: false,
       busBunchCondition: false,// assign to value and then change based on user request
-      receivedResult: false
+      receivedResult: false,
+      error: null
     };
   }
 
@@ -28,15 +29,13 @@ class Main extends React.Component {
   geolocate = (e) => {
     e.preventDefault()
     let geoOptions = {
-       enableHighAccuracy: true,
-       timeout: 5000,
-       maximumAge: 0
+       enableHighAccuracy: true
     };
 
     if ("geolocation" in navigator){
       navigator.geolocation.getCurrentPosition(this.geoSucess, this.geoError, geoOptions)
     }else {
-      console.log("geolocation is NOT available")
+      alert("Geolocation needs to be turned on for this application.")
     }
   }
 
@@ -135,45 +134,47 @@ class Main extends React.Component {
          })
         console.log(res.data)
       })
+      .catch(error => {
+        this.setState({error})
+      })
   }
 
   render() {
-    return(
-      <MDBContainer className="text-center mt-5 pt-5 mainContainer">
-        <form>
-          <MDBRow className="row justify-content-center">
-              <MDBCol md="4" sm="12">
-                  <Start departOptions={this.state.departOptions} geolocate={this.geolocate} latitude={this.state.latitude} longitude={this.state.longitude} handleChange={this.handleDepartInput}/>
-              </MDBCol>
-              <MDBCol md="4" sm="12">
-                  <End arrivalOptions={this.state.arrivalOptions} route={this.state.depart.route} handleChange={this.handleDestinationInput}/> 
-              </MDBCol>
-              <MDBCol md="1">
-                <MDBBtn size="sm" onClick={(e) => this.handleSubmit(e)}>Submit</MDBBtn>
-              </MDBCol>
-          </MDBRow>
-        </form>
-          <MDBRow className="justify-content-center">
-              <MDBCol md="5" sm="12">
-                <MDBBtn>Walk</MDBBtn>
-                <p>ETA: </p>
-              </MDBCol>
-              <MDBCol md="5" sm="12">
-                <MDBBtn>Wait</MDBBtn> 
-                <p style={{margin: "0"}}>ETA: </p>
-                <p style={{margin: "0"}}>Next bus: </p>
-              </MDBCol>
-          </MDBRow>
-
-          <WalkButtonWaitButton 
-            walkTimeCondition={this.state.walkTimeCondition}
-            busTimeCondition={this.state.busTimeCondition}
-            busBunchCondition={this.state.busBunchCondition}
-            result={this.state.receivedResult}
-          />
-
-      </MDBContainer>
-    );
+    if (this.state.error) {
+      return(
+        <MDBContainer className="text-center mt-5 pt-5 mainContainer">
+            <MDBRow className="justify-content-center">
+                <MDBCol md="5" sm="12">
+                  <MDBBtn href="/" color="yellow accent-3">TTC is unable provide bus info at this time.<br />Click here to try again.</MDBBtn>
+                </MDBCol>
+            </MDBRow>
+        </MDBContainer>
+      );
+    } else {
+      return(
+        <MDBContainer className="text-center mt-5 pt-5 mainContainer">
+          <form style={{maxWidth: "400px"}} className="mx-auto">
+            <MDBRow className="row justify-content-center">
+                <MDBCol sm="12" className="mb-4">
+                    <Start departOptions={this.state.departOptions} geolocate={this.geolocate} latitude={this.state.latitude} longitude={this.state.longitude} handleChange={this.handleDepartInput}/>
+                </MDBCol>
+                <MDBCol sm="12" className="mb-4">
+                    <End arrivalOptions={this.state.arrivalOptions} route={this.state.depart.route} handleChange={this.handleDestinationInput}/> 
+                </MDBCol>
+                <MDBCol className="p-0 mx-auto">
+                  <MDBBtn color="yellow accent-3" size="sm" onClick={(e) => this.handleSubmit(e)}>Submit</MDBBtn>
+                </MDBCol>
+            </MDBRow>
+          </form>
+            <WalkButtonWaitButton 
+              walkTimeCondition={this.state.walkTimeCondition}
+              busTimeCondition={this.state.busTimeCondition}
+              busBunchCondition={this.state.busBunchCondition}
+              result={this.state.receivedResult}
+            />  
+        </MDBContainer>
+      );
+    }
   };
 };
 
