@@ -25,31 +25,8 @@ if (process.env.NODE_ENV === "production") {
 // Add routes, both API and view
 app.use(routes);
 
-// Connect to passport
-  //CODE HERE ---
-app.use(session({
-  secret: "keyboard",
-  resave: true,
-  saveUninitialized: true
-
-}));
-app.use(passport.initialize());
-app.use(passport.session()); //login persistence
-
-// sync db
-db.sequelize.sync().then(function() {
-  console.log("database done!")
-}).catch(function(err) {
-  console.log(err, "database is wrong!")
-})
-
-// Requiring our routes
-require("./routes/htmlroutes")(app);
-require("./routes/apiroutes")(app);
-
-
 // Start the API server, true drop the db and create automatically 
-var syncOptions = { force: true };
+var syncOptions = { force: false };
 
 // If running a test, set syncOptions.force to true
 // clearing the `testdb`
