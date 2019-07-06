@@ -1,6 +1,6 @@
 // import passport for user authentication
 var passport = require("passport");
-var localStrategy = require("passport-local").Strategy;
+var LocalStrategy = require("passport-local").Strategy;
 
 // need model to check passport again
 var db = require("../../models");
@@ -36,15 +36,15 @@ passport.use(new LocalStrategy(
     }
   ));
   //
-  // In order to help keep authentication state across HTTP requests,
-  // Sequelize needs to serialize + deserialize the users
-  passport.serializeUser(function(user, cb) {
-    cb(null, user);
-  });
-  //
-  passport.deserializeUser(function(obj, cb) {
-    cb(null, obj);
-  });
-  //
-  // Exporting our configured passport
-  module.exports = passport;
+// In order to help keep authentication state across HTTP requests,
+// Sequelize needs to serialize + deserialize the users
+passport.serializeUser(function(user, cb) {
+  cb(null, user);
+});
+//
+passport.deserializeUser(function(obj, cb) {
+  cb(null, obj);
+});
+//
+// Exporting our configured passport
+module.exports = passport;
